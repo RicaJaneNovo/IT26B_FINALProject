@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'dp.php';
+include 'db.php';
 
 $error = "";
 
@@ -12,15 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($conn, $query);
     $user = mysqli_fetch_assoc($result);
 
-if ($user && password_verify($password, $user ['password'])) {
-    $_SESSION['user_id'] = $user['user_id'];
-    $_SESSION['username'] = $user['username'];
-    header("Location: dashboard.php");
-    exit();
-
-  } else {
-    $error = "Invalid username or password!";
-  }   
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $error = "Invalid username or password!";
+    }
 }
 ?>
 
@@ -29,9 +28,10 @@ if ($user && password_verify($password, $user ['password'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PawDiary - LogIn</title>
+    <title>PawDiary - Login</title>
     <style>
-        *{ margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #f5f0ff, #fce4ec);
@@ -66,18 +66,42 @@ if ($user && password_verify($password, $user ['password'])) {
             font-size: 14px;
         }
 
-        input {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 15px;
-             border: 2px solid #e0e0e0;
+            border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 15px;
             outline: none;
             transition: border 0.3s;
         }
 
-        input:focus { border-color: #7b2d8b; }
+        input[type="text"]:focus,
+        input[type="password"]:focus { border-color: #7b2d8b; }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-align: left;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .show-password input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .show-password label {
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+        }
 
         .btn-login {
             width: 100%;
@@ -91,6 +115,7 @@ if ($user && password_verify($password, $user ['password'])) {
             margin-bottom: 10px;
             transition: opacity 0.3s;
         }
+
         .btn-login:hover { opacity: 0.9; }
 
         .btn-register {
@@ -112,7 +137,8 @@ if ($user && password_verify($password, $user ['password'])) {
     </style>
 </head>
 <body>
-    <div class="container">
+
+<div class="container">
     <div class="logo">🐾</div>
     <h1>PawDiary</h1>
     <p class="tagline">Your Pet's Daily Activity Journal</p>
@@ -123,7 +149,13 @@ if ($user && password_verify($password, $user ['password'])) {
 
     <form method="POST">
         <input type="text" name="username" placeholder="Username" required />
-        <input type="password" name="password" placeholder="Password" required />
+        <input type="password" name="password" id="loginPassword" placeholder="Password" required />
+
+        <div class="show-password">
+            <input type="checkbox" id="showLoginPassword" onclick="toggleLoginPassword()">
+            <label for="showLoginPassword">Show Password</label>
+        </div>
+
         <button type="submit" class="btn-login">Login</button>
     </form>
 
@@ -132,6 +164,13 @@ if ($user && password_verify($password, $user ['password'])) {
         Register
     </button>
 </div>
+
+<script>
+    function toggleLoginPassword() {
+        var pwd = document.getElementById("loginPassword");
+        pwd.type = pwd.type === "password" ? "text" : "password";
+    }
+</script>
 
 </body>
 </html>

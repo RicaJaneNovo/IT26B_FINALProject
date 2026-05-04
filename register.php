@@ -9,7 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Check if username already exists
     $check = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
     if (mysqli_num_rows($check) > 0) {
         $error = "Username already exists!";
@@ -76,7 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 14px;
         }
 
-        input {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 15px;
@@ -87,7 +88,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: border 0.3s;
         }
 
-        input:focus { border-color: #7b2d8b; }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus { border-color: #7b2d8b; }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-align: left;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .show-password input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .show-password label {
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+        }
 
         .btn-register {
             width: 100%;
@@ -142,7 +167,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required />
             <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password" required />
+            <input type="password" name="password" id="registerPassword" placeholder="Password" required />
+
+            <div class="show-password">
+                <input type="checkbox" id="showRegisterPassword" onclick="toggleRegisterPassword()">
+                <label for="showRegisterPassword">Show Password</label>
+            </div>
+
             <button type="submit" class="btn-register">Register</button>
         </form>
 
@@ -152,6 +183,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </button>
     <?php endif; ?>
 </div>
+
+<script>
+    function toggleRegisterPassword() {
+        var pwd = document.getElementById("registerPassword");
+        pwd.type = pwd.type === "password" ? "text" : "password";
+    }
+</script>
 
 </body>
 </html>
