@@ -291,7 +291,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="showRegisterPassword">👁️ Show Password</label>
             </div>
 
-            <button type="submit" class="btn-register">🐱 Create Account</button>
+            <button type="submit" class="btn-register"> Create Account</button>
         </form>
 
         <br>

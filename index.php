@@ -257,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container">
     <div class="top-animals">🐶🐱🐰</div>
-    <div class="logo">🐾</div>
+    <div class="logo">📖</div>
     <h1>PawDiary</h1>
     <p class="tagline">🌸 Your Pet's Daily Activity Journal 🌸</p>
     <div class="divider">🐾 · 🦴 · 🐾</div>
@@ -272,18 +272,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="show-password">
             <input type="checkbox" id="showLoginPassword" onclick="toggleLoginPassword()">
-            <label for="showLoginPassword">👁️ Show Password</label>
+            <label for="showLoginPassword">Show Password</label>
         </div>
 
-        <button type="submit" class="btn-login">🐾 Login</button>
+        <button type="submit" class="btn-login"> Login</button>
     </form>
 
     <br>
     <button class="btn-register" onclick="window.location.href='register.php'">
-        🐶 Create an Account
+        Create an Account
     </button>
-
-    <div class="bottom-animals">🐱 🐾 🐶</div>
+    
 </div>
 
 <script>
