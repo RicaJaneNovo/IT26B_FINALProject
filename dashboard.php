@@ -304,6 +304,9 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
 
     <nav class="nav-menu">
         <a href="dashboard.php" class="nav-item active">
+            <a href="profile.php" class="nav-item">
+            <span>👤</span> My Profile
+        </a>
             <span>🏠</span> Dashboard
         </a>
         <a href="pets.php" class="nav-item">
