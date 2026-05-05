@@ -266,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container">
     <div class="top-animals">🐱🐾🐶</div>
-    <div class="logo">🐾</div>
+    <div class="logo">📖</div>
     <h1>PawDiary</h1>
     <p class="tagline">🌸 Join our pet-loving family! 🌸</p>
     <div class="divider">🐾 · 🦴 · 🐾</div>
@@ -282,13 +282,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </button>
     <?php else: ?>
         <form method="POST">
-            <input type="text" name="username" placeholder="🐾 Username" required />
-            <input type="email" name="email" placeholder="📧 Email" required />
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="email" name="email" placeholder="Email" required />
             <input type="password" name="password" id="registerPassword" placeholder="🔒 Password" required />
 
             <div class="show-password">
                 <input type="checkbox" id="showRegisterPassword" onclick="toggleRegisterPassword()">
-                <label for="showRegisterPassword">👁️ Show Password</label>
+                <label for="showRegisterPassword">Show Password</label>
             </div>
 
             <button type="submit" class="btn-register"> Create Account</button>
@@ -299,8 +299,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ← Back to Login
         </button>
     <?php endif; ?>
-
-    <div class="bottom-animals">🐶 🐾 🐱</div>
+    
 </div>
 
 <script>
