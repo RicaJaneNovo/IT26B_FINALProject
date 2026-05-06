@@ -2,7 +2,6 @@
 session_start();
 include 'db.php';
 
-// If not logged in, redirect to login
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -44,9 +43,23 @@ $chart_data = mysqli_query($conn,
 
 $chart_labels = [];
 $chart_values = [];
+$chart_colors = [];
+$chart_borders = [];
+
 while ($row = mysqli_fetch_assoc($chart_data)) {
     $chart_labels[] = $row['pet_name'];
     $chart_values[] = $row['total'];
+
+    if ($row['total'] == 0) {
+        $chart_colors[]  = 'rgba(231, 76, 60, 0.7)';
+        $chart_borders[] = 'rgba(231, 76, 60, 1)';
+    } elseif ($row['total'] <= 3) {
+        $chart_colors[]  = 'rgba(241, 196, 15, 0.7)';
+        $chart_borders[] = 'rgba(241, 196, 15, 1)';
+    } else {
+        $chart_colors[]  = 'rgba(39, 174, 96, 0.7)';
+        $chart_borders[] = 'rgba(39, 174, 96, 1)';
+    }
 }
 ?>
 
@@ -70,8 +83,7 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
         .sidebar {
             position: fixed;
             top: 0; left: 0;
-            width: 220px;
-            height: 100%;
+            width: 220px; height: 100%;
             background: white;
             border-right: 2px solid #ffd6e7;
             display: flex;
@@ -92,22 +104,10 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             50% { transform: translateY(-6px); }
         }
 
-        .sidebar h2 {
-            color: #d63384;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
+        .sidebar h2 { color: #d63384; font-size: 20px; margin-bottom: 5px; }
+        .sidebar p  { color: #f48fb1; font-size: 12px; margin-bottom: 30px; }
 
-        .sidebar p {
-            color: #f48fb1;
-            font-size: 12px;
-            margin-bottom: 30px;
-        }
-
-        .nav-menu {
-            width: 100%;
-            padding: 0 15px;
-        }
+        .nav-menu { width: 100%; padding: 0 15px; }
 
         .nav-item {
             display: block;
@@ -126,10 +126,7 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             color: #d63384;
         }
 
-        .nav-item span {
-            margin-right: 8px;
-            font-size: 16px;
-        }
+        .nav-item span { margin-right: 8px; font-size: 16px; }
 
         .logout-btn {
             margin-top: auto;
@@ -145,18 +142,11 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             transition: all 0.3s;
         }
 
-        .logout-btn:hover {
-            background: #d63384;
-            color: white;
-        }
+        .logout-btn:hover { background: #d63384; color: white; }
 
-        /* ── MAIN CONTENT ── */
-        .main {
-            margin-left: 220px;
-            padding: 30px;
-        }
+        /* ── MAIN ── */
+        .main { margin-left: 220px; padding: 30px; }
 
-        /* ── TOP BAR ── */
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -164,22 +154,12 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             margin-bottom: 25px;
         }
 
-        .topbar h1 {
-            color: #d63384;
-            font-size: 24px;
-        }
+        .topbar h1 { color: #d63384; font-size: 24px; }
 
-        .topbar .welcome {
-            font-size: 14px;
-            color: #888;
-        }
+        .topbar .welcome { font-size: 14px; color: #888; }
+        .topbar .welcome span { color: #d63384; font-weight: bold; }
 
-        .topbar .welcome span {
-            color: #d63384;
-            font-weight: bold;
-        }
-
-        /* ── SUMMARY CARDS ── */
+        /* ── CARDS ── */
         .cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -198,22 +178,11 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
         }
 
         .card:hover { transform: translateY(-4px); }
-
         .card .icon { font-size: 40px; margin-bottom: 10px; }
+        .card .count { font-size: 36px; font-weight: bold; color: #d63384; }
+        .card .label { font-size: 13px; color: #aaa; margin-top: 5px; }
 
-        .card .count {
-            font-size: 36px;
-            font-weight: bold;
-            color: #d63384;
-        }
-
-        .card .label {
-            font-size: 13px;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        /* ── GRID LAYOUT ── */
+        /* ── GRID ── */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -237,12 +206,30 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             border-bottom: 2px dashed #ffd6e7;
         }
 
-        /* ── TABLE ── */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
+        /* ── LEGEND ── */
+        .legend {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        /* ── TABLE ── */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
         th {
             background: #ffd6e7;
@@ -261,14 +248,6 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: #fff8fc; }
 
-        .no-data {
-            text-align: center;
-            color: #ccc;
-            padding: 20px;
-            font-size: 13px;
-        }
-
-        /* ── ACTIVITY BADGE ── */
         .badge {
             display: inline-block;
             padding: 3px 10px;
@@ -279,7 +258,14 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             color: #d63384;
         }
 
-        /* ── SEARCH BAR ── */
+        .no-data {
+            text-align: center;
+            color: #ccc;
+            padding: 30px;
+            font-size: 13px;
+        }
+
+        /* ── SEARCH ── */
         .search-bar {
             width: 100%;
             padding: 8px 12px;
@@ -288,10 +274,54 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
             font-size: 13px;
             outline: none;
             margin-bottom: 15px;
+            background: #fff8fc;
             transition: border 0.3s;
         }
 
         .search-bar:focus { border-color: #d63384; }
+
+        /* ── STATUS CARDS ── */
+        .status-section {
+            margin-top: 25px;
+        }
+
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .status-card {
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            border: 2px solid;
+        }
+
+        .status-card.red {
+            background: #fff0f0;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .status-card.yellow {
+            background: #fffbe0;
+            border-color: #f1c40f;
+            color: #b7950b;
+        }
+
+        .status-card.green {
+            background: #eafaf1;
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        .status-card .s-icon { font-size: 28px; margin-bottom: 6px; }
+        .status-card .s-name { font-weight: bold; font-size: 14px; margin-bottom: 3px; }
+        .status-card .s-count { font-size: 12px; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -299,36 +329,25 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
 <!-- ── SIDEBAR ── -->
 <div class="sidebar">
     <div class="logo">📖</div>
+    
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
-
     <nav class="nav-menu">
-        <a href="dashboard.php" class="nav-item active">
-            <a href="profile.php" class="nav-item">
-            <span>👤</span> My Profile
-        </a>
-            <span>🏠</span> Dashboard
-        </a>
-        <a href="pets.php" class="nav-item">
-            <span>🐶</span> My Pets
-        </a>
-        <a href="activities.php" class="nav-item">
-            <span>📋</span> Activities
-        </a>
-        <a href="health.php" class="nav-item">
-            <span>🏥</span> Health Records
-        </a>
+        <a href="dashboard.php" class="nav-item active"><span>🏠</span> Dashboard</a>
+        <a href="pets.php" class="nav-item"><span>🐶</span> My Pets</a>
+        <a href="activities.php" class="nav-item"><span>📋</span> Activities</a>
+        <a href="health.php" class="nav-item"><span>🏥</span> Health Records</a>
+        <a href="profile.php" class="nav-item"><span>👤</span> My Profile</a>
     </nav>
-
     <button class="logout-btn" onclick="window.location.href='logout.php'">
-        🚪 Logout
+        Logout
     </button>
 </div>
 
-<!-- ── MAIN CONTENT ── -->
+<!-- ── MAIN ── -->
 <div class="main">
 
-    <!-- Top Bar -->
+    <!-- Topbar -->
     <div class="topbar">
         <h1>🐾 Dashboard</h1>
         <div class="welcome">
@@ -358,17 +377,76 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
     <!-- Chart + Recent Activities -->
     <div class="grid-2">
 
-        <!-- Chart -->
+        <!-- Chart Panel -->
         <div class="panel">
             <h3>📊 Activities Per Pet</h3>
+
             <?php if (count($chart_labels) > 0): ?>
                 <canvas id="activityChart" height="200"></canvas>
+
+                <!-- Legend -->
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:rgba(231,76,60,0.7);"></div>
+                        🔴 No activities — needs care
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:rgba(241,196,15,0.7);"></div>
+                        🟡 1–3 activities — low
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:rgba(39,174,96,0.7);"></div>
+                        🟢 4+ activities — healthy!
+                    </div>
+                </div>
+
+                <!-- Pet Status Cards -->
+                <div class="status-section">
+                    <h3 style="margin-top:20px;">🐾 Pet Health Status</h3>
+                    <div class="status-cards">
+                        <?php
+                        $icons = ['Dog'=>'🐶','Cat'=>'🐱','Rabbit'=>'🐰',
+                                  'Hamster'=>'🐹','Bird'=>'🐦','Fish'=>'🐠','Other'=>'🐾'];
+
+                        // Re-fetch for status cards
+                        $status_data = mysqli_query($conn,
+                            "SELECT p.pet_name, p.species, COUNT(a.activity_id) as total
+                             FROM pets p
+                             LEFT JOIN activities a ON p.pet_id = a.pet_id
+                             WHERE p.user_id = '$user_id'
+                             GROUP BY p.pet_id");
+
+                        while ($s = mysqli_fetch_assoc($status_data)):
+                            $icon = $icons[$s['species']] ?? '🐾';
+                            $total = $s['total'];
+
+                            if ($total == 0) {
+                                $cls = 'red';
+                                $status = '⚠️ Needs attention!';
+                            } elseif ($total <= 3) {
+                                $cls = 'yellow';
+                                $status = '🟡 Low activity';
+                            } else {
+                                $cls = 'green';
+                                $status = '💚 Healthy & Active!';
+                            }
+                        ?>
+                        <div class="status-card <?php echo $cls; ?>">
+                            <div class="s-icon"><?php echo $icon; ?></div>
+                            <div class="s-name"><?php echo htmlspecialchars($s['pet_name']); ?></div>
+                            <div class="s-count"><?php echo $total; ?> activities</div>
+                            <div style="margin-top:5px; font-size:11px;"><?php echo $status; ?></div>
+                        </div>
+                        <?php endwhile; ?>
+                    </div>
+                </div>
+
             <?php else: ?>
                 <div class="no-data">🐾 No data yet. Add pets and activities!</div>
             <?php endif; ?>
         </div>
 
-        <!-- Recent Activities Table -->
+        <!-- Recent Activities Panel -->
         <div class="panel">
             <h3>📋 Recent Activities</h3>
             <input class="search-bar" type="text" id="searchInput"
@@ -401,7 +479,7 @@ while ($row = mysqli_fetch_assoc($chart_data)) {
     </div>
 </div>
 
-
+<!-- Chart.js -->
 <script>
 <?php if (count($chart_labels) > 0): ?>
 const ctx = document.getElementById('activityChart').getContext('2d');
@@ -412,11 +490,8 @@ new Chart(ctx, {
         datasets: [{
             label: 'Activities',
             data: <?php echo json_encode($chart_values); ?>,
-            backgroundColor: [
-                '#ffd6e7', '#f48fb1', '#d63384',
-                '#7b2d8b', '#ffb6c1', '#ff6b9d'
-            ],
-            borderColor: '#d63384',
+            backgroundColor: <?php echo json_encode($chart_colors); ?>,
+            borderColor: <?php echo json_encode($chart_borders); ?>,
             borderWidth: 2,
             borderRadius: 8,
         }]
@@ -424,7 +499,17 @@ new Chart(ctx, {
     options: {
         responsive: true,
         plugins: {
-            legend: { display: false }
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(context) {
+                        const val = context.parsed.y;
+                        if (val == 0) return '⚠️ No activities — needs attention!';
+                        if (val <= 3) return '🟡 Low activity — keep going!';
+                        return '🟢 Great job! Very active & healthy!';
+                    }
+                }
+            }
         },
         scales: {
             y: {
@@ -435,7 +520,6 @@ new Chart(ctx, {
     }
 });
 <?php endif; ?>
-
 
 function searchTable() {
     const input = document.getElementById('searchInput').value.toLowerCase();

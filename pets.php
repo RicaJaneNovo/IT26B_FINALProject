@@ -214,7 +214,7 @@ $pets = mysqli_query($conn,
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo">🐾</div>
+    <div class="logo">📖</div>
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
     <nav class="nav-menu">

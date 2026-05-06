@@ -392,7 +392,7 @@ $posts = mysqli_query($conn,
 
 <!-- ── SIDEBAR ── -->
 <div class="sidebar">
-    <div class="logo">🐾</div>
+    <div class="logo">📖</div>
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
     <nav class="nav-menu">
@@ -426,7 +426,7 @@ $posts = mysqli_query($conn,
             <div class="profile-pic-wrapper">
                 <img id="currentPic"
                     src="<?php echo !empty($user['profile_pic']) && file_exists('uploads/'.$user['profile_pic'])
-                        ? 'uploads/'.$user['profile_pic'] : 'https://placehold.co/110x110/ffd6e7/d63384?text=🐾'; ?>"
+                        ? 'uploads/'.$user['profile_pic'] : 'https://i.pinimg.com/736x/76/13/8b/76138bc224bbce4cdf56158832ad37f6.jpg'; ?>"
                     alt="Profile">
             </div>
             <div class="profile-info">
