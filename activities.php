@@ -6,17 +6,18 @@ if (!isset($_SESSION['user_id'])) { header("Location: index.php"); exit(); }
 
 $user_id = $_SESSION['user_id'];
 $success = "";
-$error = "";
+$error   = "";
 
 // --- ADD ---
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_activity'])) {
     $pet_id = $_POST['pet_id'];
-    $type = $_POST['activity_type'];
-    $desc = $_POST['description'];
-    $date = $_POST['activity_date'];
-    $query = "INSERT INTO activities (pet_id, activity_type, description, activity_date)
-              VALUES ('$pet_id', '$type', '$desc', '$date')";
-    if (mysqli_query($conn, $query)) $success = "Activity logged! 📋";
+    $type   = $_POST['activity_type'];
+    $desc   = $_POST['description'];
+    $date   = $_POST['activity_date'];
+    if (mysqli_query($conn,
+        "INSERT INTO activities (pet_id, activity_type, description, activity_date)
+         VALUES ('$pet_id','$type','$desc','$date')"))
+        $success = "Activity logged! 📋";
     else $error = "Something went wrong!";
 }
 
@@ -30,18 +31,19 @@ if (isset($_GET['delete'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_activity'])) {
     $act_id = $_POST['activity_id'];
     $pet_id = $_POST['pet_id'];
-    $type = $_POST['activity_type'];
-    $desc = $_POST['description'];
-    $date = $_POST['activity_date'];
-    mysqli_query($conn, "UPDATE activities SET pet_id='$pet_id', activity_type='$type',
-        description='$desc', activity_date='$date' WHERE activity_id='$act_id'");
+    $type   = $_POST['activity_type'];
+    $desc   = $_POST['description'];
+    $date   = $_POST['activity_date'];
+    mysqli_query($conn,
+        "UPDATE activities SET pet_id='$pet_id', activity_type='$type',
+         description='$desc', activity_date='$date'
+         WHERE activity_id='$act_id'");
     $success = "Activity updated! 📋";
 }
 
-// --- FETCH PETS ---
 $pets = mysqli_query($conn, "SELECT * FROM pets WHERE user_id='$user_id'");
 
-// --- FETCH ACTIVITIES (INNER JOIN) ---
+// INNER JOIN for activities
 $activities = mysqli_query($conn,
     "SELECT a.*, p.pet_name FROM activities a
      INNER JOIN pets p ON a.pet_id = p.pet_id
@@ -52,6 +54,7 @@ $activities = mysqli_query($conn,
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PawDiary - Activities</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -62,9 +65,9 @@ $activities = mysqli_query($conn,
             display:flex; flex-direction:column; align-items:center; padding:30px 0; z-index:100;
         }
         .sidebar .logo { font-size:40px; margin-bottom:5px; animation:bounce 2s ease-in-out infinite; }
-        @keyframes bounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)} }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
         .sidebar h2 { color:#d63384; font-size:20px; margin-bottom:5px; }
-        .sidebar p { color:#f48fb1; font-size:12px; margin-bottom:30px; }
+        .sidebar p  { color:#f48fb1; font-size:12px; margin-bottom:30px; }
         .nav-menu { width:100%; padding:0 15px; }
         .nav-item {
             display:block; padding:12px 15px; margin-bottom:8px; border-radius:12px;
@@ -94,52 +97,43 @@ $activities = mysqli_query($conn,
         label { font-size:13px; color:#888; font-weight:600; }
         input[type="text"],input[type="date"],textarea,select {
             padding:10px 12px; border:2px solid #ffd6e7; border-radius:10px;
-            font-size:14px; outline:none; background:#fff8fc; transition:border 0.3s;
-            font-family:'Segoe UI',sans-serif;
+            font-size:14px; outline:none; background:#fff8fc;
+            font-family:'Segoe UI',sans-serif; transition:border 0.3s;
         }
         input:focus,textarea:focus,select:focus { border-color:#d63384; }
         textarea { resize:vertical; min-height:70px; }
         .btn-save {
             padding:11px 25px; background:linear-gradient(135deg,#ff6b9d,#d63384);
-            color:white; border:none; border-radius:12px; font-size:14px;
-            font-weight:bold; cursor:pointer; margin-top:15px; transition:all 0.3s;
+            color:white; border:none; border-radius:12px;
+            font-size:14px; font-weight:bold; cursor:pointer; margin-top:15px; transition:all 0.3s;
         }
         .btn-save:hover { transform:translateY(-2px); }
         table { width:100%; border-collapse:collapse; font-size:13px; }
-        th { background:#ffd6e7; color:#d63384; padding:10px 12px; text-align:left; font-weight:600; }
+        th {
+            background:#ffd6e7; color:#d63384; padding:10px 12px;
+            text-align:left; font-weight:600; user-select:none; transition:background 0.2s;
+        }
+        th[onclick] { cursor:pointer; }
+        th[onclick]:hover { background:#ffb6d0; }
         td { padding:10px 12px; border-bottom:1px solid #f9f4ff; color:#555; }
         tr:last-child td { border-bottom:none; }
         tr:hover td { background:#fff8fc; }
-        .badge {
-            display:inline-block; padding:3px 10px; border-radius:20px;
-            font-size:11px; font-weight:bold; background:#ffd6e7; color:#d63384;
-        }
-        .btn-edit {
-            padding:5px 12px; background:#fff8fc; color:#7b2d8b;
-            border:2px solid #7b2d8b; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s;
-        }
+        .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:bold; background:#ffd6e7; color:#d63384; }
+        .btn-edit { padding:5px 12px; background:#fff8fc; color:#7b2d8b; border:2px solid #7b2d8b; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s; }
         .btn-edit:hover { background:#7b2d8b; color:white; }
-        .btn-delete {
-            padding:5px 12px; background:#fff0f0; color:#e74c3c;
-            border:2px solid #e74c3c; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s;
-        }
+        .btn-delete { padding:5px 12px; background:#fff0f0; color:#e74c3c; border:2px solid #e74c3c; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s; }
         .btn-delete:hover { background:#e74c3c; color:white; }
+        .search-sort-bar { display:flex; gap:10px; margin-bottom:15px; align-items:center; }
         .search-bar {
-            width:100%; padding:10px 14px; border:2px solid #ffd6e7;
-            border-radius:12px; font-size:14px; outline:none; margin-bottom:15px;
+            flex:1; padding:8px 12px; border:2px solid #ffd6e7;
+            border-radius:10px; font-size:13px; outline:none;
             background:#fff8fc; transition:border 0.3s;
         }
         .search-bar:focus { border-color:#d63384; }
         .no-data { text-align:center; color:#ccc; padding:30px; font-size:14px; }
-        .modal-overlay {
-            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-            background:rgba(0,0,0,0.3); z-index:999; align-items:center; justify-content:center;
-        }
+        .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:999; align-items:center; justify-content:center; }
         .modal-overlay.show { display:flex; }
-        .modal {
-            background:white; border-radius:20px; padding:30px; width:480px;
-            border:2px solid #ffd6e7; box-shadow:0 10px 40px rgba(214,51,132,0.2);
-        }
+        .modal { background:white; border-radius:20px; padding:30px; width:480px; border:2px solid #ffd6e7; box-shadow:0 10px 40px rgba(214,51,132,0.2); }
         .modal h3 { color:#d63384; margin-bottom:20px; }
         .modal-btns { display:flex; gap:10px; margin-top:15px; }
         .btn-cancel { padding:10px 20px; background:white; color:#888; border:2px solid #ddd; border-radius:10px; cursor:pointer; }
@@ -147,15 +141,15 @@ $activities = mysqli_query($conn,
 </head>
 <body>
 <div class="sidebar">
-    <div class="logo">📖</div>
+      <div class="logo">📖</div>
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
     <nav class="nav-menu">
-        <a href="dashboard.php" class="nav-item"><span>🏠</span> Dashboard</a>
-        <a href="pets.php" class="nav-item"><span>🐶</span> My Pets</a>
+        <a href="dashboard.php"  class="nav-item"><span>🏠</span> Dashboard</a>
+        <a href="pets.php"       class="nav-item"><span>🐶</span> My Pets</a>
         <a href="activities.php" class="nav-item active"><span>📋</span> Activities</a>
-        <a href="health.php" class="nav-item"><span>🏥</span> Health Records</a>
-        <a href="profile.php" class="nav-item"><span>👤</span> My Profile</a>
+        <a href="health.php"     class="nav-item"><span>🏥</span> Health Records</a>
+        <a href="profile.php"    class="nav-item"><span>👤</span> My Profile</a>
     </nav>
     <button class="logout-btn" onclick="window.location.href='logout.php'">🚪 Logout</button>
 </div>
@@ -164,7 +158,7 @@ $activities = mysqli_query($conn,
     <div class="topbar"><h1>📋 Activities</h1></div>
 
     <?php if ($success): ?><div class="success">✅ <?php echo $success; ?></div><?php endif; ?>
-    <?php if ($error): ?><div class="error-msg">😿 <?php echo $error; ?></div><?php endif; ?>
+    <?php if ($error):   ?><div class="error-msg">😿 <?php echo $error; ?></div><?php endif; ?>
 
     <div class="panel">
         <h3>➕ Log New Activity</h3>
@@ -208,16 +202,18 @@ $activities = mysqli_query($conn,
 
     <div class="panel">
         <h3>📋 Activity Log</h3>
-        <input class="search-bar" type="text" id="searchInput"
-            placeholder="🔍 Search activity..." onkeyup="searchTable()">
+        <div class="search-sort-bar">
+            <input class="search-bar" type="text"
+                placeholder="🔍 Search activity..." onkeyup="searchTable('activityTable', this.value)">
+        </div>
         <?php if (mysqli_num_rows($activities) > 0): ?>
         <table id="activityTable">
             <thead>
                 <tr>
-                    <th>Pet</th>
-                    <th>Activity</th>
+                    <th onclick="sortTable('activityTable', 0)">Pet ⬍</th>
+                    <th onclick="sortTable('activityTable', 1)">Activity ⬍</th>
                     <th>Description</th>
-                    <th>Date</th>
+                    <th onclick="sortTable('activityTable', 3)">Date ⬍</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -259,7 +255,6 @@ $activities = mysqli_query($conn,
                     <label>Pet</label>
                     <select name="pet_id" id="edit_pet_id">
                         <?php
-                        mysqli_data_seek($pets, 0);
                         $pets2 = mysqli_query($conn, "SELECT * FROM pets WHERE user_id='$user_id'");
                         while ($pet = mysqli_fetch_assoc($pets2)): ?>
                         <option value="<?php echo $pet['pet_id']; ?>">
@@ -299,22 +294,49 @@ $activities = mysqli_query($conn,
 
 <script>
 function openEdit(id, pet_id, type, desc, date) {
-    document.getElementById('edit_act_id').value = id;
-    document.getElementById('edit_pet_id').value = pet_id;
-    document.getElementById('edit_type').value = type;
-    document.getElementById('edit_desc').value = desc;
-    document.getElementById('edit_date').value = date;
+    document.getElementById('edit_act_id').value  = id;
+    document.getElementById('edit_pet_id').value  = pet_id;
+    document.getElementById('edit_type').value    = type;
+    document.getElementById('edit_desc').value    = desc;
+    document.getElementById('edit_date').value    = date;
     document.getElementById('editModal').classList.add('show');
 }
 function closeEdit() { document.getElementById('editModal').classList.remove('show'); }
 function confirmDelete(id) {
     if (confirm('Delete this activity?')) window.location.href = 'activities.php?delete=' + id;
 }
-function searchTable() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('#activityTable tbody tr').forEach(row => {
+function searchTable(tableId, value) {
+    const input = value.toLowerCase();
+    document.querySelectorAll('#' + tableId + ' tbody tr').forEach(row => {
         row.style.display = row.innerText.toLowerCase().includes(input) ? '' : 'none';
     });
+}
+function sortTable(tableId, colIndex) {
+    const table   = document.getElementById(tableId);
+    const tbody   = table.querySelector('tbody');
+    const rows    = Array.from(tbody.querySelectorAll('tr'));
+    const currDir = table.getAttribute('data-sort-dir') === 'asc' ? 'desc' : 'asc';
+    table.setAttribute('data-sort-dir', currDir);
+    rows.sort((a, b) => {
+        const aText = a.cells[colIndex]?.innerText.trim().toLowerCase() || '';
+        const bText = b.cells[colIndex]?.innerText.trim().toLowerCase() || '';
+        const aDate = new Date(aText);
+        const bDate = new Date(bText);
+        if (!isNaN(aDate) && !isNaN(bDate)) return currDir === 'asc' ? aDate - bDate : bDate - aDate;
+        if (aText < bText) return currDir === 'asc' ? -1 : 1;
+        if (aText > bText) return currDir === 'asc' ? 1 : -1;
+        return 0;
+    });
+    table.querySelectorAll('th').forEach(th => {
+        th.innerText = th.innerText.replace(' ▲','').replace(' ▼','').replace(' ⬍','');
+        if (th.getAttribute('onclick')) th.innerText += ' ⬍';
+    });
+    const activeTh = table.querySelectorAll('th')[colIndex];
+    if (activeTh) {
+        activeTh.innerText = activeTh.innerText.replace(' ⬍','');
+        activeTh.innerText += currDir === 'asc' ? ' ▲' : ' ▼';
+    }
+    rows.forEach(row => tbody.appendChild(row));
 }
 </script>
 </body>

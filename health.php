@@ -6,16 +6,17 @@ if (!isset($_SESSION['user_id'])) { header("Location: index.php"); exit(); }
 
 $user_id = $_SESSION['user_id'];
 $success = "";
-$error = "";
+$error   = "";
 
 // --- ADD ---
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_health'])) {
     $pet_id = $_POST['pet_id'];
-    $type = $_POST['record_type'];
-    $notes = $_POST['notes'];
-    $date = $_POST['record_date'];
-    mysqli_query($conn, "INSERT INTO health_records (pet_id, record_type, notes, record_date)
-        VALUES ('$pet_id', '$type', '$notes', '$date')");
+    $type   = $_POST['record_type'];
+    $notes  = $_POST['notes'];
+    $date   = $_POST['record_date'];
+    mysqli_query($conn,
+        "INSERT INTO health_records (pet_id, record_type, notes, record_date)
+         VALUES ('$pet_id','$type','$notes','$date')");
     $success = "Health record added! 🏥";
 }
 
@@ -29,17 +30,17 @@ if (isset($_GET['delete'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_health'])) {
     $rec_id = $_POST['record_id'];
     $pet_id = $_POST['pet_id'];
-    $type = $_POST['record_type'];
-    $notes = $_POST['notes'];
-    $date = $_POST['record_date'];
-    mysqli_query($conn, "UPDATE health_records SET pet_id='$pet_id', record_type='$type',
-        notes='$notes', record_date='$date' WHERE record_id='$rec_id'");
+    $type   = $_POST['record_type'];
+    $notes  = $_POST['notes'];
+    $date   = $_POST['record_date'];
+    mysqli_query($conn,
+        "UPDATE health_records SET pet_id='$pet_id', record_type='$type',
+         notes='$notes', record_date='$date' WHERE record_id='$rec_id'");
     $success = "Health record updated! 🏥";
 }
 
 $pets = mysqli_query($conn, "SELECT * FROM pets WHERE user_id='$user_id'");
 
-// INNER JOIN + LEFT JOIN for health records
 $records = mysqli_query($conn,
     "SELECT h.*, p.pet_name FROM health_records h
      INNER JOIN pets p ON h.pet_id = p.pet_id
@@ -50,6 +51,7 @@ $records = mysqli_query($conn,
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PawDiary - Health Records</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -60,9 +62,9 @@ $records = mysqli_query($conn,
             display:flex; flex-direction:column; align-items:center; padding:30px 0; z-index:100;
         }
         .sidebar .logo { font-size:40px; margin-bottom:5px; animation:bounce 2s ease-in-out infinite; }
-        @keyframes bounce { 0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)} }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
         .sidebar h2 { color:#d63384; font-size:20px; margin-bottom:5px; }
-        .sidebar p { color:#f48fb1; font-size:12px; margin-bottom:30px; }
+        .sidebar p  { color:#f48fb1; font-size:12px; margin-bottom:30px; }
         .nav-menu { width:100%; padding:0 15px; }
         .nav-item {
             display:block; padding:12px 15px; margin-bottom:8px; border-radius:12px;
@@ -103,18 +105,25 @@ $records = mysqli_query($conn,
         }
         .btn-save:hover { transform:translateY(-2px); }
         table { width:100%; border-collapse:collapse; font-size:13px; }
-        th { background:#ffd6e7; color:#d63384; padding:10px 12px; text-align:left; font-weight:600; }
+        th {
+            background:#ffd6e7; color:#d63384; padding:10px 12px;
+            text-align:left; font-weight:600; user-select:none; transition:background 0.2s;
+        }
+        th[onclick] { cursor:pointer; }
+        th[onclick]:hover { background:#ffb6d0; }
         td { padding:10px 12px; border-bottom:1px solid #f9f4ff; color:#555; }
+        tr:last-child td { border-bottom:none; }
         tr:hover td { background:#fff8fc; }
         .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:bold; background:#ffd6e7; color:#d63384; }
-        .badge.green { background:#e0ffe0; color:#27ae60; }
-        .badge.blue { background:#e0f0ff; color:#2980b9; }
+        .badge.green  { background:#e0ffe0; color:#27ae60; }
+        .badge.blue   { background:#e0f0ff; color:#2980b9; }
         .badge.orange { background:#fff0e0; color:#e67e22; }
         .btn-edit { padding:5px 12px; background:#fff8fc; color:#7b2d8b; border:2px solid #7b2d8b; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s; }
         .btn-edit:hover { background:#7b2d8b; color:white; }
         .btn-delete { padding:5px 12px; background:#fff0f0; color:#e74c3c; border:2px solid #e74c3c; border-radius:8px; font-size:11px; cursor:pointer; transition:all 0.3s; }
         .btn-delete:hover { background:#e74c3c; color:white; }
-        .search-bar { width:100%; padding:10px 14px; border:2px solid #ffd6e7; border-radius:12px; font-size:14px; outline:none; margin-bottom:15px; background:#fff8fc; transition:border 0.3s; }
+        .search-sort-bar { display:flex; gap:10px; margin-bottom:15px; align-items:center; }
+        .search-bar { flex:1; padding:8px 12px; border:2px solid #ffd6e7; border-radius:10px; font-size:13px; outline:none; background:#fff8fc; transition:border 0.3s; }
         .search-bar:focus { border-color:#d63384; }
         .no-data { text-align:center; color:#ccc; padding:30px; font-size:14px; }
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:999; align-items:center; justify-content:center; }
@@ -127,15 +136,15 @@ $records = mysqli_query($conn,
 </head>
 <body>
 <div class="sidebar">
-    <div class="logo">📖</div>
+      <div class="logo">📖</div>
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
     <nav class="nav-menu">
-        <a href="dashboard.php" class="nav-item"><span>🏠</span> Dashboard</a>
-        <a href="pets.php" class="nav-item"><span>🐶</span> My Pets</a>
+        <a href="dashboard.php"  class="nav-item"><span>🏠</span> Dashboard</a>
+        <a href="pets.php"       class="nav-item"><span>🐶</span> My Pets</a>
         <a href="activities.php" class="nav-item"><span>📋</span> Activities</a>
-        <a href="health.php" class="nav-item active"><span>🏥</span> Health Records</a>
-        <a href="profile.php" class="nav-item"><span>👤</span> My Profile</a>
+        <a href="health.php"     class="nav-item active"><span>🏥</span> Health Records</a>
+        <a href="profile.php"    class="nav-item"><span>👤</span> My Profile</a>
     </nav>
     <button class="logout-btn" onclick="window.location.href='logout.php'">🚪 Logout</button>
 </div>
@@ -186,16 +195,18 @@ $records = mysqli_query($conn,
 
     <div class="panel">
         <h3>🏥 Health Records</h3>
-        <input class="search-bar" type="text" id="searchInput"
-            placeholder="🔍 Search records..." onkeyup="searchTable()">
+        <div class="search-sort-bar">
+            <input class="search-bar" type="text"
+                placeholder="🔍 Search records..." onkeyup="searchTable('healthTable', this.value)">
+        </div>
         <?php if (mysqli_num_rows($records) > 0): ?>
         <table id="healthTable">
             <thead>
                 <tr>
-                    <th>Pet</th>
-                    <th>Record Type</th>
+                    <th onclick="sortTable('healthTable', 0)">Pet ⬍</th>
+                    <th onclick="sortTable('healthTable', 1)">Record Type ⬍</th>
                     <th>Notes</th>
-                    <th>Date</th>
+                    <th onclick="sortTable('healthTable', 3)">Date ⬍</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -203,9 +214,9 @@ $records = mysqli_query($conn,
             <?php while ($row = mysqli_fetch_assoc($records)):
                 $badgeClass = match($row['record_type']) {
                     'Vaccination' => 'green',
-                    'Vet Visit' => 'blue',
-                    'Medication' => 'orange',
-                    default => ''
+                    'Vet Visit'   => 'blue',
+                    'Medication'  => 'orange',
+                    default       => ''
                 };
             ?>
             <tr>
@@ -282,22 +293,49 @@ $records = mysqli_query($conn,
 
 <script>
 function openEdit(id, pet_id, type, notes, date) {
-    document.getElementById('edit_rec_id').value = id;
-    document.getElementById('edit_pet_id').value = pet_id;
-    document.getElementById('edit_type').value = type;
-    document.getElementById('edit_notes').value = notes;
-    document.getElementById('edit_date').value = date;
+    document.getElementById('edit_rec_id').value  = id;
+    document.getElementById('edit_pet_id').value  = pet_id;
+    document.getElementById('edit_type').value    = type;
+    document.getElementById('edit_notes').value   = notes;
+    document.getElementById('edit_date').value    = date;
     document.getElementById('editModal').classList.add('show');
 }
 function closeEdit() { document.getElementById('editModal').classList.remove('show'); }
 function confirmDelete(id) {
     if (confirm('Delete this health record?')) window.location.href = 'health.php?delete=' + id;
 }
-function searchTable() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('#healthTable tbody tr').forEach(row => {
+function searchTable(tableId, value) {
+    const input = value.toLowerCase();
+    document.querySelectorAll('#' + tableId + ' tbody tr').forEach(row => {
         row.style.display = row.innerText.toLowerCase().includes(input) ? '' : 'none';
     });
+}
+function sortTable(tableId, colIndex) {
+    const table   = document.getElementById(tableId);
+    const tbody   = table.querySelector('tbody');
+    const rows    = Array.from(tbody.querySelectorAll('tr'));
+    const currDir = table.getAttribute('data-sort-dir') === 'asc' ? 'desc' : 'asc';
+    table.setAttribute('data-sort-dir', currDir);
+    rows.sort((a, b) => {
+        const aText = a.cells[colIndex]?.innerText.trim().toLowerCase() || '';
+        const bText = b.cells[colIndex]?.innerText.trim().toLowerCase() || '';
+        const aDate = new Date(aText);
+        const bDate = new Date(bText);
+        if (!isNaN(aDate) && !isNaN(bDate)) return currDir === 'asc' ? aDate - bDate : bDate - aDate;
+        if (aText < bText) return currDir === 'asc' ? -1 : 1;
+        if (aText > bText) return currDir === 'asc' ? 1 : -1;
+        return 0;
+    });
+    table.querySelectorAll('th').forEach(th => {
+        th.innerText = th.innerText.replace(' ▲','').replace(' ▼','').replace(' ⬍','');
+        if (th.getAttribute('onclick')) th.innerText += ' ⬍';
+    });
+    const activeTh = table.querySelectorAll('th')[colIndex];
+    if (activeTh) {
+        activeTh.innerText = activeTh.innerText.replace(' ⬍','');
+        activeTh.innerText += currDir === 'asc' ? ' ▲' : ' ▼';
+    }
+    rows.forEach(row => tbody.appendChild(row));
 }
 </script>
 </body>
