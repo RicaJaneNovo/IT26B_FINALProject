@@ -267,8 +267,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php endif; ?>
 
     <form method="POST">
-        <input type="text" name="username" placeholder="🐾 Username" required />
-        <input type="password" name="password" id="loginPassword" placeholder="🔒 Password" required />
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" id="loginPassword" placeholder="Password" required />
 
         <div class="show-password">
             <input type="checkbox" id="showLoginPassword" onclick="toggleLoginPassword()">
@@ -282,7 +282,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button class="btn-register" onclick="window.location.href='register.php'">
         Create an Account
     </button>
-    
+
 </div>
 
 <script>
