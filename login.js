@@ -14,7 +14,7 @@ showPasswordCheckbox.addEventListener('change', function () {
 const registerBtn = document.getElementById('registerBtn');
 
 registerBtn.addEventListener('click', function () {
-    window.location.href = 'register.php';
+    window.location.href = 'register.html';
 });
 
 // ── SHOW ERROR IF LOGIN FAILED ──
