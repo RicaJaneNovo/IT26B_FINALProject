@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawDiary - Register</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+
+<!-- ── BACKGROUND ANIMALS ── -->
+<div class="bg-pattern">
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+</div>
+
+<!-- ── REGISTER CARD ── -->
+<div class="register-card">
+
+    <!-- Top Animals -->
+    <div class="top-animals">🐱🐾🐶</div>
+
+    <!-- Logo -->
+    <span class="logo-icon">📖</span>
+
+    <!-- Title -->
+    <h1>PawDiary</h1>
+
+    <!-- Tagline -->
+    <p class="tagline">🌸 Join our pet-loving family! 🌸</p>
+
+    <!-- Divider -->
+    <div class="divider">🐾 · 🦴 · 🐾</div>
+
+    <!-- Success Message -->
+    <div class="success" id="successMsg" style="display:none;">
+        🎉 Account created! You can now login.
+    </div>
+
+    <!-- Error Message -->
+    <div class="error" id="errorMsg" style="display:none;">
+        😿 Username already exists!
+    </div>
+
+    <!-- Register Form -->
+    <form method="POST" action="register.php" id="registerForm">
+
+        <div class="input-group">
+            <input type="text" name="username" id="username"
+                placeholder="Username" required>
+        </div>
+
+        <div class="input-group">
+            <input type="email" name="email" id="email"
+                placeholder="Email" required>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" id="password"
+                placeholder="Password" required>
+        </div>
+
+        <div class="show-password">
+            <input type="checkbox" id="showPassword">
+            <label for="showPassword">Show Password</label>
+        </div>
+
+        <button type="submit" class="btn-register">
+            Create Account
+        </button>
+
+    </form>
+
+    <button class="btn-back" id="backBtn">
+        ← Back to Login
+    </button>
+
+</div>
+
+<script src="register.js"></script>
+</body>
+</html>
