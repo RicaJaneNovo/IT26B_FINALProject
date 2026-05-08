@@ -1,564 +1,87 @@
+<?php
+session_start();
+include 'db.php';
+
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $query = "SELECT * FROM users WHERE username = '$username'";
+    $result = mysqli_query($conn, $query);
+    $user = mysqli_fetch_assoc($result);
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $error = "Invalid username or password!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PawDiary - Pet Daily Activity Journal</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    <title>PawDiary - Login</title>
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f5f0ff, #fce4ec);
-            min-height: 100vh;
-        }
-
-        /* HERO */
-        .hero {
-            text-align: center;
-            padding: 80px 20px 60px;
-            background: linear-gradient(135deg, #ff6b9d, #d63384);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '🐾';
-            position: absolute;
-            font-size: 300px;
-            opacity: 0.05;
-            top: -50px;
-            left: -50px;
-        }
-
-        .hero::after {
-            content: '🐾';
-            position: absolute;
-            font-size: 300px;
-            opacity: 0.05;
-            bottom: -50px;
-            right: -50px;
-        }
-
-        .hero .logo {
-            font-size: 70px;
-            margin-bottom: 15px;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .hero p {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .hero-badges {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-
-        .hero-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            border: 1px solid rgba(255,255,255,0.4);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-white {
-            padding: 14px 30px;
-            background: white;
-            color: #d63384;
-            border: none;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        }
-
-        .btn-white:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .btn-outline {
-            padding: 14px 30px;
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: #d63384;
-            transform: translateY(-3px);
-        }
-
-        /* CONTAINER */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* SECTION */
-        .section {
-            padding: 60px 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            color: #d63384;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .section-sub {
-            text-align: center;
-            color: #aaa;
-            font-size: 15px;
-            margin-bottom: 40px;
-        }
-
-        /* FEATURES */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            border: 2px solid #ffd6e7;
-            box-shadow: 0 5px 20px rgba(214,51,132,0.08);
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover { transform: translateY(-5px); }
-
-        .feature-card .f-icon { font-size: 45px; margin-bottom: 15px; }
-        .feature-card h3 { color: #d63384; font-size: 18px; margin-bottom: 10px; }
-        .feature-card p  { color: #888; font-size: 14px; line-height: 1.6; }
-
-        /* TECH STACK */
-        .tech-section {
-            background: white;
-            padding: 60px 20px;
-            border-top: 2px solid #ffd6e7;
-            border-bottom: 2px solid #ffd6e7;
-        }
-
-        .tech-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .tech-badge {
-            background: #f9f4ff;
-            border: 2px solid #ffd6e7;
-            border-radius: 12px;
-            padding: 15px 25px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: bold;
-            color: #7b2d8b;
-            transition: all 0.3s;
-        }
-
-        .tech-badge:hover {
-            background: #ffd6e7;
-            transform: translateY(-3px);
-        }
-
-        .tech-badge .t-icon { font-size: 30px; display: block; margin-bottom: 5px; }
-
-        /* DATABASE */
-        .db-section { padding: 60px 20px; }
-
-        .db-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .db-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            border: 2px solid #ffd6e7;
-            box-shadow: 0 4px 15px rgba(214,51,132,0.06);
-        }
-
-        .db-card h4 { color: #d63384; font-size: 15px; margin-bottom: 10px; }
-        .db-card ul { list-style: none; padding: 0; }
-        .db-card ul li {
-            font-size: 12px;
-            color: #888;
-            padding: 4px 0;
-            border-bottom: 1px dashed #ffd6e7;
-        }
-        .db-card ul li:last-child { border-bottom: none; }
-
-        /* JOINS */
-        .joins-section { padding: 60px 20px; background: white; }
-
-        .joins-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .join-card {
-            border-radius: 16px;
-            padding: 20px 25px;
-            border: 2px solid;
-        }
-
-        .join-card.inner { background: #e0f0ff; border-color: #2980b9; }
-        .join-card.left  { background: #e0ffe0; border-color: #27ae60; }
-        .join-card.right { background: #fff0e0; border-color: #e67e22; }
-        .join-card.outer { background: #f0e0ff; border-color: #7b2d8b; }
-
-        .join-card h4 { font-size: 16px; margin-bottom: 8px; }
-        .join-card.inner h4 { color: #2980b9; }
-        .join-card.left  h4 { color: #27ae60; }
-        .join-card.right h4 { color: #e67e22; }
-        .join-card.outer h4 { color: #7b2d8b; }
-
-        .join-card p { font-size: 13px; color: #555; line-height: 1.6; }
-
-        /* TEAM */
-        .team-section { padding: 60px 20px; }
-
-        .team-grid {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .team-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 40px;
-            text-align: center;
-            border: 2px solid #ffd6e7;
-            box-shadow: 0 5px 20px rgba(214,51,132,0.08);
-            transition: transform 0.3s;
-        }
-
-        .team-card:hover { transform: translateY(-5px); }
-
-        .team-card .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b9d, #d63384);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-            margin: 0 auto 15px;
-            border: 3px solid #ffd6e7;
-        }
-
-        .team-card h3 { color: #d63384; font-size: 18px; margin-bottom: 5px; }
-        .team-card p  { color: #aaa; font-size: 13px; }
-
-        /* SCHOOL */
-        .school-section {
-            background: linear-gradient(135deg, #ff6b9d, #d63384);
-            padding: 40px 20px;
-            text-align: center;
-            color: white;
-        }
-
-        .school-section h3 { font-size: 20px; margin-bottom: 5px; }
-        .school-section p  { font-size: 14px; opacity: 0.85; }
-
-        /* FOOTER */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 13px;
-        }
-
-        footer span { color: #f48fb1; }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .features-grid { grid-template-columns: 1fr; }
-            .db-grid { grid-template-columns: repeat(2, 1fr); }
-            .joins-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 30px; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- HERO -->
-<div class="hero">
-    <div class="logo">🐾</div>
+<div class="bg-animals">
+    <div class="animal">🐶</div>
+    <div class="animal">🐱</div>
+    <div class="animal">🐾</div>
+    <div class="animal">🐰</div>
+    <div class="animal">🐹</div>
+    <div class="animal">🐶</div>
+    <div class="animal">🐱</div>
+    <div class="animal">🐾</div>
+    <div class="animal">🦴</div>
+    <div class="animal">🐰</div>
+    <div class="animal">🐹</div>
+    <div class="animal">🐾</div>
+</div>
+
+<div class="paw-pattern"></div>
+
+<div class="container">
+    <div class="top-animals">🐶🐱🐰</div>
+    <div class="logo">📖</div>
     <h1>PawDiary</h1>
-    <p>Your Pet's Daily Activity Journal</p>
-    <div class="hero-badges">
-        <span class="hero-badge">🐶 Pet Management</span>
-        <span class="hero-badge">📋 Activity Logging</span>
-        <span class="hero-badge">🏥 Health Records</span>
-        <span class="hero-badge">📊 Dashboard Charts</span>
-        <span class="hero-badge">🔗 SQL Joins</span>
-    </div>
-    <div class="btn-group">
-        <a href="https://github.com/YOUR_USERNAME/PawDiary"
-            target="_blank" class="btn-white">
-            🐙 View on GitHub
-        </a>
-        <a href="#features" class="btn-outline">
-            📋 See Features
-        </a>
-    </div>
+    <p class="tagline">🌸 Your Pet's Daily Activity Journal 🌸</p>
+    <div class="divider">🐾 · 🦴 · 🐾</div>
+
+    <?php if ($error): ?>
+        <div class="error">😿 <?php echo $error; ?></div>
+    <?php endif; ?>
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" id="loginPassword" placeholder="Password" required />
+
+        <div class="show-password">
+            <input type="checkbox" id="showLoginPassword" onclick="toggleLoginPassword()">
+            <label for="showLoginPassword">Show Password</label>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+    </form>
+
+    <br>
+
+    <button class="btn-register" onclick="window.location.href='register.php'">
+        Create an Account
+    </button>
 </div>
 
-<!-- FEATURES -->
-<div class="section" id="features">
-    <h2 class="section-title">✨ Features</h2>
-    <p class="section-sub">Everything you need to manage your pet's daily life</p>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="f-icon">🔐</div>
-            <h3>Secure Login & Register</h3>
-            <p>User authentication with encrypted passwords using PHP password_hash(). Session management for secure access.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">🏠</div>
-            <h3>Interactive Dashboard</h3>
-            <p>Overview of all pets with Chart.js bar charts showing activity levels. Color-coded health status for each pet.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">🐶</div>
-            <h3>Pet Management</h3>
-            <p>Add, view, edit, and delete pets. Supports dogs, cats, rabbits, hamsters, birds, fish and more.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">📋</div>
-            <h3>Activity Logging</h3>
-            <p>Track feeding, walking, grooming, playing, training and bathing activities with full CRUD operations.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">🏥</div>
-            <h3>Health Records</h3>
-            <p>Monitor vet visits, vaccinations, medications, weight checks and deworming schedules.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">👤</div>
-            <h3>User Profile</h3>
-            <p>Upload profile pictures, write a bio, and post cute photos of your pets in a personal gallery.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">🔗</div>
-            <h3>SQL Join Integration</h3>
-            <p>Uses INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN with comments explaining each join's purpose.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">🔍</div>
-            <h3>Search & Sort</h3>
-            <p>Real-time search filtering and column sorting on all tables for better user experience.</p>
-        </div>
-        <div class="feature-card">
-            <div class="f-icon">📊</div>
-            <h3>Activity Charts</h3>
-            <p>Visual bar charts with red/yellow/green color coding showing each pet's activity and health status.</p>
-        </div>
-    </div>
-</div>
-
-<!-- TECH STACK -->
-<div class="tech-section">
-    <h2 class="section-title">🛠️ Technologies Used</h2>
-    <p class="section-sub">Built with these tools and technologies</p>
-    <div class="tech-grid">
-        <div class="tech-badge">
-            <span class="t-icon">🐘</span> PHP
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">🗄️</span> MySQL
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">🌐</span> HTML/CSS
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">⚡</span> JavaScript
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">📊</span> Chart.js
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">🔧</span> XAMPP
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">🐙</span> GitHub
-        </div>
-        <div class="tech-badge">
-            <span class="t-icon">💻</span> VS Code
-        </div>
-    </div>
-</div>
-
-<!-- DATABASE TABLES -->
-<div class="db-section">
-    <h2 class="section-title">🗄️ Database Structure</h2>
-    <p class="section-sub">PawDiary uses 5 related tables in MySQL</p>
-    <div class="db-grid">
-        <div class="db-card">
-            <h4>👤 users</h4>
-            <ul>
-                <li>user_id (PK)</li>
-                <li>username</li>
-                <li>email</li>
-                <li>password</li>
-                <li>full_name</li>
-                <li>bio</li>
-                <li>profile_pic</li>
-                <li>created_at</li>
-            </ul>
-        </div>
-        <div class="db-card">
-            <h4>🐶 pets</h4>
-            <ul>
-                <li>pet_id (PK)</li>
-                <li>user_id (FK)</li>
-                <li>pet_name</li>
-                <li>species</li>
-                <li>breed</li>
-                <li>age</li>
-            </ul>
-        </div>
-        <div class="db-card">
-            <h4>📋 activities</h4>
-            <ul>
-                <li>activity_id (PK)</li>
-                <li>pet_id (FK)</li>
-                <li>activity_type</li>
-                <li>description</li>
-                <li>activity_date</li>
-            </ul>
-        </div>
-        <div class="db-card">
-            <h4>🏥 health_records</h4>
-            <ul>
-                <li>record_id (PK)</li>
-                <li>pet_id (FK)</li>
-                <li>record_type</li>
-                <li>notes</li>
-                <li>record_date</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- SQL JOINS -->
-<div class="joins-section">
-    <h2 class="section-title">🔗 SQL Join Integration</h2>
-    <p class="section-sub">All 4 types of SQL joins are used in PawDiary</p>
-    <div class="joins-grid">
-        <div class="join-card inner">
-            <h4>🔵 INNER JOIN</h4>
-            <p>Returns only activities that have a matching pet in both tables. Used in the dashboard to display the activity log.</p>
-        </div>
-        <div class="join-card left">
-            <h4>🟢 LEFT JOIN</h4>
-            <p>Returns all pets even if they have no activities logged yet. Used to show complete pet list with activity counts.</p>
-        </div>
-        <div class="join-card right">
-            <h4>🟠 RIGHT JOIN</h4>
-            <p>Returns all activities even if the pet record no longer exists. Ensures no activity data is lost.</p>
-        </div>
-        <div class="join-card outer">
-            <h4>🟣 FULL OUTER JOIN</h4>
-            <p>Shows all pets and health records whether matched or not. Simulated using UNION of LEFT + RIGHT JOIN in MySQL.</p>
-        </div>
-    </div>
-</div>
-
-<!-- TEAM -->
-<div class="team-section">
-    <h2 class="section-title">👥 Our Team</h2>
-    <p class="section-sub">IT26 Final Project — Northern Bukidnon State College</p>
-    <div class="team-grid">
-        <div class="team-card">
-            <div class="avatar">🐾</div>
-            <h3>[Your Name Here]</h3>
-            <p>BSIT Student</p>
-            <p style="color:#f48fb1; margin-top:5px;">Northern Bukidnon State College</p>
-        </div>
-        <div class="team-card">
-            <div class="avatar">🐾</div>
-            <h3>[Partner's Name Here]</h3>
-            <p>BSIT Student</p>
-            <p style="color:#f48fb1; margin-top:5px;">Northern Bukidnon State College</p>
-        </div>
-    </div>
-</div>
-
-<!-- SCHOOL -->
-<div class="school-section">
-    <h3>🎓 Northern Bukidnon State College</h3>
-    <p>IT26 Fundamentals of Database System — May 2026</p>
-    <p style="margin-top:5px;">College of Computer Studies</p>
-</div>
-
-<!-- FOOTER -->
-<footer>
-    <p>🐾 PawDiary — Pet Daily Activity Journal | Made with ❤️ by
-        <span>[Your Names Here]</span>
-    </p>
-</footer>
+<script src="script.js"></script>
 
 </body>
 </html>
