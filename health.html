@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawDiary - Health Records</title>
+    <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">📖</div>
+    <h2>PawDiary</h2>
+    <p>Pet Activity Journal</p>
+    <nav class="nav-menu">
+        <a href="dashboard.html"  class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="pets.html"       class="nav-item"><span class="nav-icon">🐶</span> My Pets</a>
+        <a href="activities.html" class="nav-item"><span class="nav-icon">📋</span> Activities</a>
+        <a href="health.html"     class="nav-item active"><span class="nav-icon">🏥</span> Health Records</a>
+        <a href="profile.html"    class="nav-item"><span class="nav-icon">👤</span> My Profile</a>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h1>🏥 Health Records</h1>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <!-- ADD HEALTH RECORD -->
+    <div class="panel">
+        <h3>➕ Add Health Record</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Select Pet</label>
+                <select id="healthPet">
+                    <option value="">-- Choose a pet --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Record Type</label>
+                <select id="healthType">
+                    <option value="Vet Visit">🏥 Vet Visit</option>
+                    <option value="Vaccination">💉 Vaccination</option>
+                    <option value="Medication">💊 Medication</option>
+                    <option value="Weight Check">⚖️ Weight Check</option>
+                    <option value="Deworming">🐛 Deworming</option>
+                    <option value="Other">🐾 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="healthDate">
+            </div>
+            <div class="form-group full">
+                <label>Notes</label>
+                <textarea id="healthNotes" placeholder="Add notes about this health record..."></textarea>
+            </div>
+        </div>
+        <button class="btn-primary" id="addHealthBtn" style="margin-top:15px;">
+            🏥 Add Record
+        </button>
+    </div>
+
+    <!-- HEALTH RECORDS TABLE -->
+    <div class="panel">
+        <h3>🏥 Health Records</h3>
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" type="text" id="healthSearch"
+                placeholder="Search records..." oninput="filterHealth()">
+        </div>
+        <table id="healthTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('healthTable',0)">Pet ⬍</th>
+                    <th onclick="sortTable('healthTable',1)">Record Type ⬍</th>
+                    <th>Notes</th>
+                    <th onclick="sortTable('healthTable',3)">Date ⬍</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="healthTableBody"></tbody>
+        </table>
+        <div class="no-data" id="noHealth">🏥 No health records yet!</div>
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <h3>✏️ Edit Health Record</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Pet</label>
+                <select id="editHealthPet"></select>
+            </div>
+            <div class="form-group">
+                <label>Record Type</label>
+                <select id="editHealthType">
+                    <option value="Vet Visit">🏥 Vet Visit</option>
+                    <option value="Vaccination">💉 Vaccination</option>
+                    <option value="Medication">💊 Medication</option>
+                    <option value="Weight Check">⚖️ Weight Check</option>
+                    <option value="Deworming">🐛 Deworming</option>
+                    <option value="Other">🐾 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="editHealthDate">
+            </div>
+            <div class="form-group full">
+                <label>Notes</label>
+                <textarea id="editHealthNotes"></textarea>
+            </div>
+        </div>
+        <div class="modal-btns">
+            <button class="btn-primary" id="saveEditBtn">💾 Save</button>
+            <button class="btn-cancel"  id="closeEditBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="health.js"></script>
+</body>
+</html>

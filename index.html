@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- ── BACKGROUND ANIMALS ── -->
+<!-- BACKGROUND ANIMALS -->
 <div class="bg-pattern">
     <div class="bg-animal">🐶</div>
     <div class="bg-animal">🐱</div>
@@ -28,55 +28,35 @@
     <div class="paw-print">🐾</div>
 </div>
 
-<!-- ── LOGIN CARD ── -->
+<!-- LOGIN CARD -->
 <div class="login-card">
-
-    <!-- Top Animals -->
     <div class="top-animals">🐶🐱🐰</div>
-
-    <!-- Logo -->
     <span class="logo-icon">📖</span>
-
-    <!-- Title -->
     <h1>PawDiary</h1>
-
-    <!-- Tagline -->
     <p class="tagline">🌸 Your Pet's Daily Activity Journal 🌸</p>
-
-    <!-- Divider -->
     <div class="divider">🐾 · 🦴 · 🐾</div>
 
-    <!-- Error Message -->
-    <div class="error" id="errorMsg" style="display:none;">
+    <div class="alert-error" id="errorMsg" style="display:none;">
         😿 Invalid username or password!
     </div>
 
-    <!-- Login Form -->
     <form id="loginForm">
-
         <div class="input-group">
-            <input type="text" name="username" id="username"
-                placeholder="Username" required>
+            <input type="text" id="username" placeholder="Username" required>
         </div>
-
         <div class="input-group">
-            <input type="password" name="password" id="password"
-                placeholder="Password" required>
+            <input type="password" id="password" placeholder="Password" required>
         </div>
-
         <div class="show-password">
             <input type="checkbox" id="showPassword">
             <label for="showPassword">Show Password</label>
         </div>
-
         <button type="submit" class="btn-login">Login</button>
-
     </form>
 
     <button class="btn-register" id="registerBtn">
         Create an Account
     </button>
-
 </div>
 
 <script src="login.js"></script>

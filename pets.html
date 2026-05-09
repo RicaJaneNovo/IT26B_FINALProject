@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawDiary - My Pets</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="pets.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">📖</div>
+    <h2>PawDiary</h2>
+    <p>Pet Activity Journal</p>
+    <nav class="nav-menu">
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="pets.html" class="nav-item active"><span class="nav-icon">🐶</span> My Pets</a>
+        <a href="activities.html" class="nav-item"><span class="nav-icon">📋</span> Activities</a>
+        <a href="health.html" class="nav-item"><span class="nav-icon">🏥</span> Health Records</a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span> My Profile</a>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h1>🐶 My Pets</h1>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <!-- ADD PET -->
+    <div class="panel">
+        <h3>➕ Add New Pet</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Pet Name</label>
+                <input type="text" id="petName" placeholder="e.g. Fluffy">
+            </div>
+            <div class="form-group">
+                <label>Species</label>
+                <select id="petSpecies">
+                    <option value="Dog">🐶 Dog</option>
+                    <option value="Cat">🐱 Cat</option>
+                    <option value="Rabbit">🐰 Rabbit</option>
+                    <option value="Hamster">🐹 Hamster</option>
+                    <option value="Bird">🐦 Bird</option>
+                    <option value="Fish">🐠 Fish</option>
+                    <option value="Other">🐾 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Breed</label>
+                <input type="text" id="petBreed" placeholder="e.g. Shih Tzu">
+            </div>
+            <div class="form-group">
+                <label>Age (years)</label>
+                <input type="number" id="petAge" placeholder="e.g. 2" min="0">
+            </div>
+        </div>
+        <button class="btn-primary" id="addPetBtn" style="margin-top:15px;">
+            🐾 Add Pet
+        </button>
+    </div>
+
+    <!-- PET LIST -->
+    <div class="panel">
+        <h3>🐾 My Pet List</h3>
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" type="text" id="petSearch"
+                placeholder="Search pet..." oninput="filterPets()">
+        </div>
+        <div id="petGrid" class="pet-grid">
+            <!-- filled by JS -->
+        </div>
+        <div class="no-data" id="noPets">
+            🐾 No pets yet! Add your first pet above.
+        </div>
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <h3>✏️ Edit Pet</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Pet Name</label>
+                <input type="text" id="editPetName">
+            </div>
+            <div class="form-group">
+                <label>Species</label>
+                <select id="editPetSpecies">
+                    <option value="Dog">🐶 Dog</option>
+                    <option value="Cat">🐱 Cat</option>
+                    <option value="Rabbit">🐰 Rabbit</option>
+                    <option value="Hamster">🐹 Hamster</option>
+                    <option value="Bird">🐦 Bird</option>
+                    <option value="Fish">🐠 Fish</option>
+                    <option value="Other">🐾 Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Breed</label>
+                <input type="text" id="editPetBreed">
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="editPetAge" min="0">
+            </div>
+        </div>
+        <div class="modal-btns">
+            <button class="btn-primary" id="saveEditBtn">💾 Save Changes</button>
+            <button class="btn-cancel" id="closeEditBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="pets.js"></script>
+</body>
+</html>

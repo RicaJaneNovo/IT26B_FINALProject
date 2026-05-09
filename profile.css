@@ -1,0 +1,46 @@
+.profile-header {
+    display: flex; align-items: center;
+    gap: 25px; margin-bottom: 25px;
+}
+
+.avatar-wrap img {
+    width: 90px; height: 90px;
+    border-radius: 50%; object-fit: cover;
+    border: 4px solid #ffd6e7;
+}
+
+.profile-info h2 { color: #333; font-size: 20px; }
+.profile-info p  { color: #aaa; font-size: 13px; margin-top: 3px; }
+.profile-info .bio-text {
+    color: #777; font-size: 14px;
+    margin-top: 8px; font-style: italic;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.gallery-card {
+    border-radius: 14px; overflow: hidden;
+    border: 1.5px solid #f0d6ff;
+    background: white; transition: transform 0.3s;
+}
+
+.gallery-card:hover { transform: translateY(-4px); }
+
+.gallery-card img {
+    width: 100%; height: 180px; object-fit: cover;
+}
+
+.gallery-card .card-info { padding: 12px; }
+
+.gallery-card .pet-tag {
+    display: inline-block; background: #ffd6e7;
+    color: #d63384; font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 6px;
+}
+
+.gallery-card .caption { font-size: 13px; color: #555; margin-bottom: 4px; }
+.gallery-card .date    { font-size: 11px; color: #bbb; }

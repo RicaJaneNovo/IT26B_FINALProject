@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawDiary - My Profile</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">📖</div>
+    <h2>PawDiary</h2>
+    <p>Pet Activity Journal</p>
+    <nav class="nav-menu">
+        <a href="dashboard.html"  class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a href="pets.html"       class="nav-item"><span class="nav-icon">🐶</span> My Pets</a>
+        <a href="activities.html" class="nav-item"><span class="nav-icon">📋</span> Activities</a>
+        <a href="health.html"     class="nav-item"><span class="nav-icon">🏥</span> Health Records</a>
+        <a href="profile.html"    class="nav-item active"><span class="nav-icon">👤</span> My Profile</a>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h1>👤 My Profile</h1>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <!-- PROFILE DISPLAY + EDIT -->
+    <div class="panel">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-wrap">
+                <img id="profilePicDisplay"
+                    src="https://placehold.co/90x90/ffd6e7/d63384?text=🐾"
+                    alt="Profile">
+            </div>
+            <div class="profile-info">
+                <h2 id="displayName">Username</h2>
+                <p id="displayAt">@username</p>
+                <p id="displayBio" class="bio-text">No bio yet. Tell us about yourself! 🐾</p>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <h3>✏️ Edit Profile</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+                <label>Profile Picture</label>
+                <input type="file" id="profilePic" accept="image/*">
+            </div>
+            <div class="form-group full">
+                <label>Bio / About Me</label>
+                <textarea id="bio" placeholder="Tell us about yourself and your pets! 🐾"></textarea>
+            </div>
+        </div>
+        <button class="btn-primary" id="saveProfileBtn" style="margin-top:15px;">
+            💾 Save Profile
+        </button>
+    </div>
+
+    <!-- POST PET PHOTO -->
+    <div class="panel">
+        <h3>📸 Post Your Pet's Photo</h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Select Pet</label>
+                <select id="postPet">
+                    <option value="">-- Choose a pet --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pet Photo</label>
+                <input type="file" id="postPhoto" accept="image/*">
+            </div>
+            <div class="form-group full">
+                <label>Caption</label>
+                <textarea id="postCaption"
+                    placeholder="Write something cute about your pet! 🐾"></textarea>
+            </div>
+        </div>
+        <button class="btn-primary" id="postPhotoBtn" style="margin-top:15px;">
+            🐾 Post Photo
+        </button>
+    </div>
+
+    <!-- PET GALLERY -->
+    <div class="panel">
+        <h3>🖼️ My Pet Gallery</h3>
+        <div id="gallery" class="gallery-grid">
+            <!-- filled by JS -->
+        </div>
+        <div class="no-data" id="noGallery">
+            🐾 No pet photos yet! Post your first cute pet photo above! 📸
+        </div>
+    </div>
+</div>
+
+<script src="profile.js"></script>
+</body>
+</html>

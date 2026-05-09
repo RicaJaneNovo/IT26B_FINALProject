@@ -1,8 +1,4 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -15,7 +11,7 @@ body {
     position: relative;
 }
 
-/* ── BACKGROUND ANIMALS ── */
+/* ── BACKGROUND ── */
 .bg-pattern {
     position: fixed;
     top: 0; left: 0;
@@ -44,7 +40,6 @@ body {
 .bg-animal:nth-child(11) { top: 30%; right: 15%; font-size: 48px; animation-delay: 3.5s; }
 .bg-animal:nth-child(12) { top: 70%; right: 20%; font-size: 52px; animation-delay: 1.2s; }
 
-/* PAW PRINTS */
 .paw-print {
     position: absolute;
     font-size: 30px;
@@ -62,28 +57,26 @@ body {
     50%       { transform: translateY(-15px); }
 }
 
-/* ── LOGIN CARD ── */
+/* ── CARD ── */
 .login-card {
     position: relative;
     z-index: 1;
     background: white;
     padding: 45px 45px 40px;
     border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(255, 100, 150, 0.15);
+    box-shadow: 0 20px 60px rgba(255,100,150,0.15);
     width: 100%;
     max-width: 420px;
     text-align: center;
-    border: 1.5px solid rgba(255, 182, 193, 0.5);
+    border: 1.5px solid rgba(255,182,193,0.5);
 }
 
-/* ── TOP ANIMALS ── */
 .top-animals {
     font-size: 38px;
     margin-bottom: 12px;
     letter-spacing: 8px;
 }
 
-/* ── LOGO ── */
 .logo-icon {
     font-size: 52px;
     margin-bottom: 10px;
@@ -96,24 +89,19 @@ body {
     50%       { transform: translateY(-8px); }
 }
 
-/* ── TITLE ── */
 h1 {
     font-size: 32px;
     font-weight: 800;
     color: #e91e8c;
     margin-bottom: 6px;
-    letter-spacing: 0.5px;
 }
 
-/* ── TAGLINE ── */
 .tagline {
     color: #f48fb1;
     font-size: 13px;
     margin-bottom: 18px;
-    letter-spacing: 0.3px;
 }
 
-/* ── DIVIDER ── */
 .divider {
     font-size: 16px;
     color: #f4a0c0;
@@ -121,21 +109,19 @@ h1 {
     letter-spacing: 5px;
 }
 
-/* ── ERROR ── */
-.error {
+/* ── ALERT ── */
+.alert-error {
     background: #ffe0e0;
     color: #c0392b;
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 15px;
     font-size: 13px;
+    border-left: 4px solid #c0392b;
 }
 
-/* ── INPUT GROUP ── */
-.input-group {
-    margin-bottom: 14px;
-    text-align: left;
-}
+/* ── INPUTS ── */
+.input-group { margin-bottom: 14px; }
 
 input[type="text"],
 input[type="password"] {
@@ -154,13 +140,10 @@ input[type="password"] {
 input[type="text"]:focus,
 input[type="password"]:focus {
     background: #e8eeff;
-    box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.1);
+    box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
 }
 
-input[type="text"]::placeholder,
-input[type="password"]::placeholder {
-    color: #aab;
-}
+input::placeholder { color: #aab; }
 
 /* ── SHOW PASSWORD ── */
 .show-password {
@@ -168,7 +151,6 @@ input[type="password"]::placeholder {
     align-items: center;
     gap: 8px;
     margin-bottom: 18px;
-    text-align: left;
     padding-left: 5px;
 }
 
@@ -186,7 +168,7 @@ input[type="password"]::placeholder {
     cursor: pointer;
 }
 
-/* ── LOGIN BUTTON ── */
+/* ── BUTTONS ── */
 .btn-login {
     width: 100%;
     padding: 15px;
@@ -199,20 +181,14 @@ input[type="password"]::placeholder {
     cursor: pointer;
     margin-bottom: 14px;
     transition: all 0.3s;
-    letter-spacing: 0.5px;
-    box-shadow: 0 8px 20px rgba(233, 30, 140, 0.3);
+    box-shadow: 0 8px 20px rgba(233,30,140,0.3);
 }
 
 .btn-login:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(233, 30, 140, 0.4);
+    box-shadow: 0 12px 25px rgba(233,30,140,0.4);
 }
 
-.btn-login:active {
-    transform: translateY(0);
-}
-
-/* ── REGISTER BUTTON ── */
 .btn-register {
     width: 100%;
     padding: 14px;
@@ -224,16 +200,10 @@ input[type="password"]::placeholder {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
-    letter-spacing: 0.5px;
 }
 
 .btn-register:hover {
     background: linear-gradient(135deg, #ff6b9d, #e91e8c);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(233, 30, 140, 0.3);
-}
-
-.btn-register:active {
-    transform: translateY(0);
 }
