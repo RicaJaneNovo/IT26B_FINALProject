@@ -1,17 +1,14 @@
-// ── SHOW / HIDE PASSWORD ──
 document.getElementById('showPassword')
     .addEventListener('change', function () {
         document.getElementById('password').type =
             this.checked ? 'text' : 'password';
     });
 
-// ── REGISTER BUTTON ──
 document.getElementById('registerBtn')
     .addEventListener('click', function () {
         window.location.href = 'register.html';
     });
 
-// ── LOGIN FORM ──
 document.getElementById('loginForm')
     .addEventListener('submit', function (e) {
         e.preventDefault();
@@ -20,19 +17,17 @@ document.getElementById('loginForm')
         const password = document.getElementById('password').value.trim();
         const errorMsg = document.getElementById('errorMsg');
 
-        // Hide error
         errorMsg.style.display = 'none';
 
-        // Check empty fields
         if (!username || !password) {
             errorMsg.innerText = '😿 Please fill in all fields!';
             errorMsg.style.display = 'block';
             return;
         }
 
-        // Save login locally
+        // SIMPLE LOGIN (NO BACKEND)
         localStorage.setItem('pawdiary_user', username);
 
-        // Redirect to dashboard
+        // GO TO DASHBOARD
         window.location.href = 'dashboard.html';
     });
