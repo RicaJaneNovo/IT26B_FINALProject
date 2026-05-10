@@ -40,18 +40,26 @@
         😿 Invalid username or password!
     </div>
 
+    <div class="alert-success" id="successMsg" style="display:none;">
+        ✅ Login successful! Redirecting...
+    </div>
+
     <form id="loginForm">
         <div class="input-group">
-            <input type="text" id="username" placeholder="Username" required>
+            <input type="text" id="username"
+                placeholder="Username" required>
         </div>
         <div class="input-group">
-            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="password"
+                placeholder="Password" required>
         </div>
         <div class="show-password">
             <input type="checkbox" id="showPassword">
             <label for="showPassword">Show Password</label>
         </div>
-        <button type="submit" class="btn-login">Login</button>
+        <button type="submit" class="btn-login" id="loginBtn">
+            Login
+        </button>
     </form>
 
     <button class="btn-register" id="registerBtn">
