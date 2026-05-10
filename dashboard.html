@@ -15,14 +15,32 @@
     <div class="logo">📖</div>
     <h2>PawDiary</h2>
     <p>Pet Activity Journal</p>
+
     <nav class="nav-menu">
-        <a href="dashboard.html"  class="nav-item active"><span class="nav-icon">🏠</span> Dashboard</a>
-        <a href="pets.html"       class="nav-item"><span class="nav-icon">🐶</span> My Pets</a>
-        <a href="activities.html" class="nav-item"><span class="nav-icon">📋</span> Activities</a>
-        <a href="health.html"     class="nav-item"><span class="nav-icon">🏥</span> Health Records</a>
-        <a href="profile.html"    class="nav-item"><span class="nav-icon">👤</span> My Profile</a>
+        <a href="dashboard.html" class="nav-item active">
+            <span class="nav-icon">🏠</span> Dashboard
+        </a>
+
+        <a href="pets.html" class="nav-item">
+            <span class="nav-icon">🐶</span> My Pets
+        </a>
+
+        <a href="activities.html" class="nav-item">
+            <span class="nav-icon">📋</span> Activities
+        </a>
+
+        <a href="health.html" class="nav-item">
+            <span class="nav-icon">🏥</span> Health Records
+        </a>
+
+        <a href="profile.html" class="nav-item">
+            <span class="nav-icon">👤</span> My Profile
+        </a>
     </nav>
-    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+
+    <button class="logout-btn" id="logoutBtn">
+        🚪 Logout
+    </button>
 </div>
 
 <!-- MAIN -->
@@ -31,229 +49,80 @@
     <!-- Topbar -->
     <div class="topbar">
         <h1>🐾 Dashboard</h1>
+
         <div class="welcome">
-            Welcome back, <span id="welcomeUser">User</span>! 🌸
+            Welcome back,
+            <span id="welcomeUser">User</span>! 🌸
         </div>
     </div>
 
     <!-- Summary Cards -->
     <div class="cards">
+
         <div class="card">
             <div class="card-icon">🐶</div>
             <div class="card-count" id="totalPets">0</div>
             <div class="card-label">Total Pets</div>
         </div>
+
         <div class="card">
             <div class="card-icon">📋</div>
             <div class="card-count" id="totalActivities">0</div>
             <div class="card-label">Total Activities</div>
         </div>
+
         <div class="card">
             <div class="card-icon">🏥</div>
             <div class="card-count" id="totalHealth">0</div>
             <div class="card-label">Health Records</div>
         </div>
-    </div>
-
-    <!-- Chart + Recent Activities -->
-    <div class="grid-2">
-
-        <!-- Chart Panel -->
-        <div class="panel">
-            <h3>📊 Activities Per Pet</h3>
-            <div id="chartArea">
-                <canvas id="activityChart" height="200"></canvas>
-                <div class="legend" id="chartLegend">
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:rgba(231,76,60,0.7);"></div>
-                        🔴 No activities — needs care
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:rgba(241,196,15,0.7);"></div>
-                        🟡 1–3 activities — low
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-dot" style="background:rgba(39,174,96,0.7);"></div>
-                        🟢 4+ activities — healthy!
-                    </div>
-                </div>
-                <!-- Pet Status Cards -->
-                <div class="status-section">
-                    <h3 style="margin-top:20px; border-top:2px dashed #ffd6e7; padding-top:15px;">
-                        🐾 Pet Health Status
-                    </h3>
-                    <div class="status-cards" id="statusCards"></div>
-                </div>
-            </div>
-            <div class="no-data" id="noChart">
-                🐾 No data yet. Add pets and activities!
-            </div>
-        </div>
-
-        <!-- Recent Activities -->
-        <div class="panel">
-            <h3>📋 Recent Activities</h3>
-            <div class="search-wrap">
-                <span class="search-icon">🔍</span>
-                <input class="search-input" type="text"
-                    id="actSearch" placeholder="Search activity..."
-                    oninput="searchTable('actTable', this.value)">
-            </div>
-            <table id="actTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable('actTable',0)">Pet ⬍</th>
-                        <th onclick="sortTable('actTable',1)">Activity ⬍</th>
-                        <th onclick="sortTable('actTable',2)">Date ⬍</th>
-                    </tr>
-                </thead>
-                <tbody id="actTableBody"></tbody>
-            </table>
-            <div class="no-data" id="noAct">
-                🐾 No activities yet. Start logging!
-            </div>
-        </div>
 
     </div>
 
-    <!-- SQL JOINS -->
+    <!-- CONTENT -->
     <div class="panel">
-        <h3>🔗 SQL Join Integration</h3>
-        <div class="join-tabs">
-            <button class="join-tab active"
-                onclick="showJoin('inner', this)">
-                🔵 INNER JOIN
-            </button>
-            <button class="join-tab"
-                onclick="showJoin('left', this)">
-                🟢 LEFT JOIN
-            </button>
-            <button class="join-tab"
-                onclick="showJoin('right', this)">
-                🟠 RIGHT JOIN
-            </button>
-            <button class="join-tab"
-                onclick="showJoin('outer', this)">
-                🟣 FULL OUTER JOIN
-            </button>
-        </div>
+        <h3>🐾 Welcome to PawDiary Dashboard</h3>
 
-        <!-- INNER JOIN -->
-        <div id="join-inner" class="join-content active">
-            <div class="join-desc">
-                <span class="join-badge inner">INNER JOIN</span>
-                Shows activities <strong>only</strong> if a matching
-                pet exists in both tables.
-            </div>
-            <div class="search-wrap">
-                <span class="search-icon">🔍</span>
-                <input class="search-input" placeholder="Search..."
-                    oninput="searchTable('innerTable', this.value)">
-            </div>
-            <table id="innerTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable('innerTable',0)">Pet ⬍</th>
-                        <th onclick="sortTable('innerTable',1)">Activity ⬍</th>
-                        <th>Description</th>
-                        <th onclick="sortTable('innerTable',3)">Date ⬍</th>
-                    </tr>
-                </thead>
-                <tbody id="innerBody"></tbody>
-            </table>
-            <div class="no-data" id="noInner">
-                No matching data. Add activities first!
-            </div>
-        </div>
-
-        <!-- LEFT JOIN -->
-        <div id="join-left" class="join-content">
-            <div class="join-desc">
-                <span class="join-badge left">LEFT JOIN</span>
-                Shows <strong>all pets</strong> even if they have
-                no activities logged yet.
-            </div>
-            <div class="search-wrap">
-                <span class="search-icon">🔍</span>
-                <input class="search-input" placeholder="Search..."
-                    oninput="searchTable('leftTable', this.value)">
-            </div>
-            <table id="leftTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable('leftTable',0)">Pet ⬍</th>
-                        <th onclick="sortTable('leftTable',1)">Species ⬍</th>
-                        <th onclick="sortTable('leftTable',2)">Breed ⬍</th>
-                        <th onclick="sortTable('leftTable',3)">Activities ⬍</th>
-                        <th onclick="sortTable('leftTable',4)">Status ⬍</th>
-                    </tr>
-                </thead>
-                <tbody id="leftBody"></tbody>
-            </table>
-            <div class="no-data" id="noLeft">
-                No pets found. Add your pets first!
-            </div>
-        </div>
-
-        <!-- RIGHT JOIN -->
-        <div id="join-right" class="join-content">
-            <div class="join-desc">
-                <span class="join-badge right">RIGHT JOIN</span>
-                Shows <strong>all activities</strong> even if the
-                pet record no longer exists.
-            </div>
-            <div class="search-wrap">
-                <span class="search-icon">🔍</span>
-                <input class="search-input" placeholder="Search..."
-                    oninput="searchTable('rightTable', this.value)">
-            </div>
-            <table id="rightTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable('rightTable',0)">Pet ⬍</th>
-                        <th onclick="sortTable('rightTable',1)">Activity ⬍</th>
-                        <th onclick="sortTable('rightTable',2)">Date ⬍</th>
-                    </tr>
-                </thead>
-                <tbody id="rightBody"></tbody>
-            </table>
-            <div class="no-data" id="noRight">
-                No activities found!
-            </div>
-        </div>
-
-        <!-- FULL OUTER JOIN -->
-        <div id="join-outer" class="join-content">
-            <div class="join-desc">
-                <span class="join-badge outer">FULL OUTER JOIN</span>
-                Shows <strong>all pets and all health records</strong>
-                whether matched or not. Simulated using
-                <strong>UNION of LEFT + RIGHT JOIN</strong>.
-            </div>
-            <div class="search-wrap">
-                <span class="search-icon">🔍</span>
-                <input class="search-input" placeholder="Search..."
-                    oninput="searchTable('outerTable', this.value)">
-            </div>
-            <table id="outerTable" style="display:none;">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable('outerTable',0)">Pet ⬍</th>
-                        <th onclick="sortTable('outerTable',1)">Species ⬍</th>
-                        <th onclick="sortTable('outerTable',2)">Record Type ⬍</th>
-                        <th>Notes</th>
-                        <th onclick="sortTable('outerTable',4)">Date ⬍</th>
-                    </tr>
-                </thead>
-                <tbody id="outerBody"></tbody>
-            </table>
-            <div class="no-data" id="noOuter">No data found!</div>
-        </div>
-
+        <p>
+            Your pet activity monitoring system is now connected successfully.
+        </p>
     </div>
 
 </div>
 
+<!-- LOGIN CONNECTION SCRIPT -->
+<script>
+    // Check login
+    const user = localStorage.getItem('pawdiary_user');
+
+    // Redirect if not logged in
+    if (!user) {
+        window.location.href = 'login.html';
+    }
+
+    // Show username
+    const welcomeUser = document.getElementById('welcomeUser');
+
+    if (welcomeUser && user) {
+        welcomeUser.textContent = user;
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function () {
+
+            // Remove saved login
+            localStorage.removeItem('pawdiary_user');
+
+            // Back to login
+            window.location.href = 'login.html';
+        });
+    }
+</script>
+
 <script src="dashboard.js"></script>
+
 </body>
 </html>
