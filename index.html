@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawDiary - Login</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<!-- BACKGROUND ANIMALS -->
+<div class="bg-pattern">
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="bg-animal">🐶</div>
+    <div class="bg-animal">🐱</div>
+    <div class="bg-animal">🐹</div>
+    <div class="bg-animal">🐰</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+    <div class="paw-print">🐾</div>
+</div>
+
+<!-- LOGIN CARD -->
+<div class="login-card">
+    <div class="top-animals">🐶🐱🐰</div>
+    <span class="logo-icon">📖</span>
+    <h1>PawDiary</h1>
+    <p class="tagline">🌸 Your Pet's Daily Activity Journal 🌸</p>
+    <div class="divider">🐾 · 🦴 · 🐾</div>
+
+    <div class="alert-error" id="errorMsg" style="display:none;">
+        😿 Invalid username or password!
+    </div>
+
+    <div class="alert-success" id="successMsg" style="display:none;">
+        ✅ Login successful! Redirecting...
+    </div>
+
+    <form id="loginForm">
+        <div class="input-group">
+            <input type="text" id="username"
+                placeholder="Username" required>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password"
+                placeholder="Password" required>
+        </div>
+        <div class="show-password">
+            <input type="checkbox" id="showPassword">
+            <label for="showPassword">Show Password</label>
+        </div>
+        <button type="submit" class="btn-login" id="loginBtn">
+            Login
+        </button>
+    </form>
+
+    <button class="btn-register" id="registerBtn">
+        Create an Account
+    </button>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>
