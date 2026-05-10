@@ -11,28 +11,67 @@ document.getElementById('registerBtn')
         window.location.href = 'register.html';
     });
 
-// ── LOGIN FORM SUBMIT ──
+// ── LOGIN FORM ──
 document.getElementById('loginForm')
     .addEventListener('submit', function (e) {
         e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
 
+        const username   = document.getElementById('username').value.trim();
+        const password   = document.getElementById('password').value.trim();
+        const errorMsg   = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
+        const loginBtn   = document.getElementById('loginBtn');
+
+        // Hide messages
+        errorMsg.style.display   = 'none';
+        successMsg.style.display = 'none';
+
+        // Validate
         if (!username || !password) {
-            document.getElementById('errorMsg').style.display = 'block';
+            errorMsg.innerText     = '😿 Please fill in all fields!';
+            errorMsg.style.display = 'block';
             return;
         }
 
-        // Check if user exists in localStorage
-        const users = JSON.parse(localStorage.getItem('pawdiary_users') || '[]');
-        const user  = users.find(u =>
-            u.username === username && u.password === password
-        );
+        // Disable button while loading
+        loginBtn.disabled    = true;
+        loginBtn.textContent = 'Logging in...';
 
-        if (user) {
-            localStorage.setItem('pawdiary_user', username);
-            window.location.href = 'dashboard.html';
-        } else {
-            document.getElementById('errorMsg').style.display = 'block';
-        }
+        // ── FETCH TO PHP ──
+        fetch('http://localhost/pawdiary/login_action.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Save to localStorage
+                localStorage.setItem('pawdiary_user',    data.username);
+                localStorage.setItem('pawdiary_user_id', data.user_id);
+
+                // Show success
+                successMsg.innerText     = '✅ Login successful! Redirecting...';
+                successMsg.style.display = 'block';
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                // Show error
+                errorMsg.innerText     = '😿 ' + data.message;
+                errorMsg.style.display = 'block';
+
+                // Re-enable button
+                loginBtn.disabled    = false;
+                loginBtn.textContent = 'Login';
+            }
+        })
+        .catch(err => {
+            errorMsg.innerText     = '😿 Cannot connect to server! Make sure XAMPP is running.';
+            errorMsg.style.display = 'block';
+            loginBtn.disabled      = false;
+            loginBtn.textContent   = 'Login';
+        });
     });
